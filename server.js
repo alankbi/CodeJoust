@@ -10,6 +10,11 @@ app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+// Add this for Let's Encrypt ACME challenge validation
+app.get('/.well-known/acme-challenge/:str', function (req, res) {
+  res.send(process.env.LETS_ENCRYPT_CHALLENGE);
+})
+
 /* static files */
 app.use(favicon(path.join(__dirname, '/favicon.ico')));
 app.use("/css", express.static(__dirname + '/css'));
