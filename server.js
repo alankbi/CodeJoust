@@ -12,10 +12,7 @@ app.get('/', function(req, res) {
 
 // Add this for Let's Encrypt ACME challenge validation
 app.get('/.well-known/acme-challenge/:str', function (req, res) {
-  let str = process.env.LETS_ENCRYPT_CHALLENGE;
-  // Given that it's formatted like b'...' when it should just be ...
-  str = str.substring(2, str.length - 1);
-  res.send(str);
+  res.send(req['str']);
 })
 
 /* static files */
