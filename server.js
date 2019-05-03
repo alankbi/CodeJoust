@@ -12,7 +12,8 @@ app.get('/', function(req, res) {
 
 // Add this for Let's Encrypt ACME challenge validation
 app.get('/.well-known/acme-challenge/:str', function (req, res) {
-  res.send(process.env.LETS_ENCRYPT_CHALLENGE.toString());
+  // res.send(process.env.LETS_ENCRYPT_CHALLENGE.toString());
+  res.send(new Buffer(process.env.LETS_ENCRYPT_CHALLENGE).toString('ascii'));
 })
 
 /* static files */
