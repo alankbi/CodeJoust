@@ -1,5 +1,5 @@
-const {expect}  = require('chai');
+const { expect } = require('chai');
 
-it('Main page content', function() {
-    expect(true).to.be.true;
+it('runs expected', () => {
+  expect(true).to.be.true;
 });
