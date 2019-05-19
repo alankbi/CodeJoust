@@ -4,7 +4,8 @@
   "description": "A realtime competitive programming game where students compete to solve problems and climb the public leaderboard.",
   "main": "server.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",

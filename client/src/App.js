@@ -1,8 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = ({ text: '' });
+
+    this.showAPICallText = this.showAPICallText.bind(this);
+  }
+
+  componentDidMount() {
+    this.showAPICallText();
+  }
+
+  async showAPICallText() {
+    const response = await fetch('/api/hello/');
+    const json = await response.json();
+    const { text } = json;
+    this.setState({ text });
+  }
+
   render() {
     return (
       <div className="App">
@@ -11,8 +30,11 @@ class App extends Component {
           <h2>Welcome to React</h2>
         </div>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          To get started, edit
+          <code>src/App.js</code>
+          and save to reload.
         </p>
+        <p>{this.state.text}</p>
       </div>
     );
   }
