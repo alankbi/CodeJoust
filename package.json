@@ -4,6 +4,9 @@
   "description": "A realtime competitive programming game where students compete to solve problems and climb the public leaderboard.",
   "main": "server.js",
   "scripts": {
+    "client": "npm start --prefix client",
+    "server": "nodemon server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "mocha",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
@@ -16,12 +19,14 @@
   "homepage": "https://github.com/CodeJoustCo/CodeJoust",
   "devDependencies": {
     "chai": "^4.2.0",
+    "concurrently": "^4.1.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.17.2",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.0"
   },
   "dependencies": {
     "express": "^4.16.4"

@@ -23,6 +23,7 @@ class App extends React.Component {
   }
 
   render() {
+    const { text } = this.state;
     return (
       <div className="App">
         <div className="App-header">
@@ -34,7 +35,7 @@ class App extends React.Component {
           <code>src/App.js</code>
           and save to reload.
         </p>
-        <p>{this.state.text}</p>
+        <p>{text}</p>
       </div>
     );
   }

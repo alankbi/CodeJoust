@@ -15,6 +15,7 @@ lerna-debug.log*
 
 # production
 /build
+/client/build
 
 # misc
 .DS_Store
