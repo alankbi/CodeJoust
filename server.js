@@ -1,7 +1,11 @@
 const express = require('express');
 const path = require('path');
+
+require('dotenv').config();
+
 const bodyParser = require('body-parser');
 const submitRoute = require('./routes/submitRoute');
+const authRoute= require('./routes/authRoute');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -16,6 +20,9 @@ app.get('/api/hello/', async (req, res) => {
 
 // Load in API routes for submitting
 app.use('/api/submit/', submitRoute);
+
+// API route for login and register
+app.use('/api/auth/', authRoute);
 
 // React production files
 app.use(express.static(path.join(__dirname, 'client/build')));
