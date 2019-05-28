@@ -1,90 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Validator = require('validator');
-const isEmpty = require('is-empty');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const validate = require('../validation/validate');
 
 const User = mongoose.model('User');
 
 const router = express.Router();
 
-const errorMessages = {
-  missingUsername: 'Please enter a username',
-  existingUsername: 'This username already exists',
-  nonexistentUsername: 'This username does not exist',
-  missingEmail: 'Please enter an email',
-  invalidEmail: 'Please enter a valid email',
-  existingEmail: 'This email already exists',
-  missingPassword: 'Please enter a password',
-  invalidPassword: 'Password must be between 8 and 30 characters',
-  wrongPassword: 'Password is incorrect',
-  nonMatchingPassword: 'Passwords must match',
-};
-
-// Ensure fields are not empty, email is valid, and passwords are valid/matching
-function validateRegisterInput(data) {
-  const errors = {};
-
-  const parsedData = {};
-  parsedData.username = !isEmpty(data.username) ? data.username : '';
-  parsedData.email = !isEmpty(data.email) ? data.email : '';
-  parsedData.password = !isEmpty(data.password) ? data.password : '';
-  parsedData.confirmPassword = !isEmpty(data.confirmPassword) ? data.confirmPassword : '';
-
-  if (Validator.isEmpty(parsedData.username)) {
-    errors.username = errorMessages.missingUsername;
-  }
-
-  if (Validator.isEmpty(parsedData.email)) {
-    errors.email = errorMessages.missingEmail;
-  } else if (!Validator.isEmail(parsedData.email)) {
-    errors.email = errorMessages.invalidEmail;
-  }
-
-  if (Validator.isEmpty(parsedData.password) || Validator.isEmpty(parsedData.confirmPassword)) {
-    errors.password = errorMessages.missingPassword;
-  }
-
-  if (!Validator.isLength(parsedData.password, { min: 8, max: 30 })) {
-    errors.password = errorMessages.invalidPassword;
-  }
-
-  if (!Validator.equals(parsedData.password, parsedData.confirmPassword)) {
-    errors.password = errorMessages.nonMatchingPassword;
-  }
-
-  return {
-    isValid: isEmpty(errors),
-    errors,
-  };
-}
-
-// Ensure username and password are not empty
-function validateLoginInput(data) {
-  const errors = {};
-
-  const parsedData = {};
-  parsedData.username = !isEmpty(data.username) ? data.username : '';
-  parsedData.password = !isEmpty(data.password) ? data.password : '';
-
-  if (Validator.isEmpty(parsedData.username)) {
-    errors.username = errorMessages.missingUsername;
-  }
-
-  if (Validator.isEmpty(parsedData.password)) {
-    errors.password = errorMessages.missingPassword;
-  }
-
-  return {
-    isValid: isEmpty(errors),
-    errors,
-  };
-}
-
 // @route POST /api/auth/register/
 router.post('/register', (req, res) => {
-  const { isValid, errors } = validateRegisterInput(req.body);
+  const { isValid, errors } = validate.validateRegisterInput(req.body);
   if (!isValid) {
     res.status(400).json(errors);
     return;
@@ -93,7 +19,7 @@ router.post('/register', (req, res) => {
   User.find({
     $or: [{ email: req.body.email },
       { username: req.body.username }],
-  }).then((err, user) => {
+  }).then((user, err) => {
     if (err && err.length > 0) {
       res.status(400).json(err);
       return;
@@ -103,10 +29,10 @@ router.post('/register', (req, res) => {
     if (user && user.length !== 0) {
       const errs = {};
       if (user[0].username === req.body.username) {
-        errs.username = errorMessages.existingUsername;
+        errs.username = validate.errorMessages.existingUsername;
       }
       if (user[0].email === req.body.email) {
-        errs.email = errorMessages.existingEmail;
+        errs.email = validate.errorMessages.existingEmail;
       }
       res.status(400).json(errs);
     } else {
@@ -136,7 +62,7 @@ router.post('/register', (req, res) => {
 
 // @route POST /api/auth/login/
 router.post('/login', (req, res) => {
-  const { isValid, errors } = validateLoginInput(req.body);
+  const { isValid, errors } = validate.validateLoginInput(req.body);
   if (!isValid) {
     res.status(400).json(errors);
     return;
@@ -144,7 +70,7 @@ router.post('/login', (req, res) => {
 
   User.findOne({ username: req.body.username }).then((user) => {
     if (!user) {
-      res.status(404).json({ username: errorMessages.nonexistentUsername });
+      res.status(404).json({ username: validate.errorMessages.nonexistentUsername });
       return;
     }
 
@@ -167,7 +93,7 @@ router.post('/login', (req, res) => {
           }
         });
       } else {
-        res.status(400).json({ password: errorMessages.wrongPassword });
+        res.status(400).json({ password: validate.errorMessages.wrongPassword });
       }
     });
   });

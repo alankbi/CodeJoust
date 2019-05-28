@@ -1,10 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const mongoose = require('mongoose');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+require('./config/database');
 
 // Register all database models
 const modelsPath = path.join(__dirname, 'models');
@@ -24,18 +24,6 @@ const port = process.env.PORT || 8080;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// Connect to database
-const dbPath = process.env.DB_CONNECTION;
-const options = { useCreateIndex: true, useNewUrlParser: true }; // Fix deprecation warnings
-mongoose.connect(dbPath, options).catch((err) => {
-  throw err;
-});
-
-// Fixes MaxListenersExceededWarning
-mongoose.connection.on('close', () => {
-  mongoose.connection.removeAllListeners();
-});
 
 // Passport middleware
 app.use(passport.initialize());
@@ -61,3 +49,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(port);
+
+module.exports = app;
