@@ -5,8 +5,7 @@ const chai = require('chai');
 const { expect } = chai;
 
 describe('Database connection', () => {
-  before(function (done) {
-    this.timeout(10000);
+  before((done) => {
     mongoose.connection.on('connected', done);
   });
 
