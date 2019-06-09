@@ -57,6 +57,8 @@ router.post('/register', (req, res) => {
         });
       });
     }
+  }).catch((err) => {
+    res.status(400).json(err);
   });
 });
 
@@ -95,7 +97,11 @@ router.post('/login', (req, res) => {
       } else {
         res.status(400).json({ password: validate.errorMessages.wrongPassword });
       }
+    }).catch((err) => {
+      res.status(400).json(err);
     });
+  }).catch((err) => {
+    res.status(400).json(err);
   });
 });
 

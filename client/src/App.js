@@ -1,44 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+import NavBar from './components/layout/NavBar';
+import Landing from './components/layout/Landing';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 
-    this.state = ({ text: '' });
-
-    this.showAPICallText = this.showAPICallText.bind(this);
-  }
-
-  componentDidMount() {
-    this.showAPICallText();
-  }
-
-  async showAPICallText() {
-    const response = await fetch('/api/hello/');
-    const json = await response.json();
-    const { text } = json;
-    this.setState({ text });
-  }
-
-  render() {
-    const { text } = this.state;
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit
-          <code>src/App.js</code>
-          and save to reload.
-        </p>
-        <p>{text}</p>
+function App() {
+  return (
+    <BrowserRouter>
+      <div className="app">
+        <NavBar />
+        <Switch>
+          <Route path="/" component={Landing} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+        </Switch>
       </div>
-    );
-  }
+    </BrowserRouter>
+  );
 }
 
 export default App;
