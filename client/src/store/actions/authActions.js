@@ -18,6 +18,7 @@ export const registerUser = (userData, history) => (dispatch) => {
     .post('/api/auth/register', userData)
     // eslint-disable-next-line no-unused-vars
     .then((res) => {
+      // TODO: loginUser
       history.push('/login');
     }).catch((err) => {
       dispatch({
@@ -29,7 +30,7 @@ export const registerUser = (userData, history) => (dispatch) => {
 
 export const loginUser = (userData, history) => (dispatch) => {
   axios
-    .post('/api/auth/login')
+    .post('/api/auth/login', userData)
     .then((res) => {
       const { token } = res.data;
 

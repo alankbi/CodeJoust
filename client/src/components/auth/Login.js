@@ -1,5 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
+
+import { loginUser } from '../../store/actions/authActions';
 
 class Login extends React.Component {
   constructor() {
@@ -15,6 +20,24 @@ class Login extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    const { auth, history } = this.props;
+    if (auth.isAuthenticated) {
+      history.push('/');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      const { history } = this.props;
+      history.push('/');
+    }
+
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   onChange(e) {
     this.setState({ [e.target.id]: e.target.value });
   }
@@ -25,8 +48,9 @@ class Login extends React.Component {
     const { username, password } = this.state;
 
     const userData = { username, password };
-
-    console.log(userData);
+    const { history } = this.props;
+    // eslint-disable-next-line react/destructuring-assignment
+    this.props.loginUser(userData, history);
   }
 
   render() {
@@ -43,7 +67,7 @@ class Login extends React.Component {
           <label htmlFor="username">
             Username
             <input
-              className="input-field"
+              className={classNames('input-field', { invalid: errors.username })}
               onChange={this.onChange}
               value={username}
               error={errors.username}
@@ -51,10 +75,11 @@ class Login extends React.Component {
               type="text"
             />
           </label>
+          <span className="error-text">{errors.username}</span>
           <label htmlFor="password">
             Password
             <input
-              className="input-field"
+              className={classNames('input-field', { invalid: errors.password })}
               onChange={this.onChange}
               value={password}
               error={errors.password}
@@ -62,6 +87,7 @@ class Login extends React.Component {
               type="password"
             />
           </label>
+          <span className="error-text">{errors.password}</span>
           <button type="submit" className="submit-button">Login</button>
         </form>
       </div>
@@ -69,4 +95,16 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  auth: PropTypes.objectOf(PropTypes.object).isRequired,
+  errors: PropTypes.objectOf(PropTypes.object).isRequired,
+  loginUser: PropTypes.func.isRequired,
+  history: PropTypes.objectOf(PropTypes.object).isRequired,
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors,
+});
+
+export default connect(mapStateToProps, { loginUser })(withRouter(Login));

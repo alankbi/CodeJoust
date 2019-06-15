@@ -1,19 +1,35 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-function NavBar() {
+function NavBar({ auth }) {
   return (
     <div className="navbar">
       <nav>
         <Link to="/">
           Home
         </Link>
-        <Link to="/login">
-          Login
-        </Link>
+        {auth.isAuthenticated ? (
+          <Link to="/settings">
+            Settings
+          </Link>
+        ) : (
+          <Link to="/login">
+            Login
+          </Link>
+        )}
       </nav>
     </div>
   );
 }
 
-export default NavBar;
+NavBar.propTypes = {
+  auth: PropTypes.objectOf(PropTypes.object).isRequired,
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps)(NavBar);
