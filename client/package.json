@@ -4,7 +4,9 @@
   "private": true,
   "proxy": "http://localhost:8080/",
   "dependencies": {
+    "codemirror": "^5.46.0",
     "react": "^16.8.6",
+    "react-codemirror": "^1.0.0",
     "react-dom": "^16.8.6",
     "react-scripts": "0.9.5"
   },
