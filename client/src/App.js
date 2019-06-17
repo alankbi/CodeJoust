@@ -13,11 +13,8 @@ import 'codemirror/mode/go/go';
 import 'codemirror/mode/rust/rust';
 import 'codemirror/theme/rubyblue.css';
 
-// eslint-disable-next-line max-len
-// I've really gotten lost trying a bunch of different stuff, so sorry the code is a bit of a jumble rn.
-
 const defaults = {
-  clike: 'public enum Enum {\n\tVAL1, VAL2, VAL3\n}',
+  'text/x-java': 'public enum Enum {\n\tVAL1, VAL2, VAL3\n}',
   javascript: 'var component = {\n\tname: "react-codemirror",\n\tauthor: "Jed Watson",\n\trepo: "https://github.com/JedWatson/react-codemirror"\n};'
 };
 
@@ -26,45 +23,33 @@ class App extends React.Component {
     super(props);
 
     this.state = ({
-      code: defaults.clike,
-      mode: 'clike',
+      code: defaults['text/x-java'],
+      mode: 'text/x-java',
     });
 
-    this.showAPICallText = this.showAPICallText.bind(this);
+    this.changeMode = this.changeMode.bind(this);
   }
 
-  componentDidMount() {
-    this.showAPICallText();
-    // updateCode(??);
-  }
-
-  updateCode(newCode) {
-    this.setState({
-      code: newCode,
-    });
+  updateCode(code) {
+    this.setState({ code });
   }
 
   changeMode(e) {
-    var mode = e.target.value;
+    const mode = e.target.value;
     this.setState({
-      mode: mode,
+      mode,
       code: defaults[mode],
     });
   }
 
-  async showAPICallText() {
-    const response = await fetch('/api/hello/');
-    const json = await response.json();
-    const { code } = json;
-    this.setState({ code });
-  }
 
   render() {
-    let options = {
+    const { code, mode } = this.state;
+    const options = {
       lineNumbers: true,
-      name: 'clike',
-      theme: 'rubyblue',
-      mode: this.state.mode,
+      theme: 'default',
+      mode,
+      value: code,
     };
     return (
       <div className="App">
@@ -79,9 +64,9 @@ class App extends React.Component {
           {' '}
           and save to reload.
         </p>
-        <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
-        <select id="language" onChange={this.changeMode}>
-          <option value="clike">Java</option>
+        <CodeMirror value={code} onChange={this.updateCode} options={options} />
+        <select id="language" onChange={this.changeMode} value={mode}>
+          <option value="text/x-java">Java</option>
           <option value="javascript">JavaScript</option>
         </select>
       </div>
