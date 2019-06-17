@@ -1,16 +1,12 @@
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 
-import { GET_ERRORS, USER_LOADING, SET_USER } from './types';
+import { GET_ERRORS, SET_USER } from './types';
 import setAuthToken from '../../utils/setAuthToken';
 
 export const setUser = userData => ({
   type: SET_USER,
   payload: userData,
-});
-
-export const setUserLoading = () => ({
-  type: USER_LOADING,
 });
 
 export const registerUser = (userData, history) => (dispatch) => {

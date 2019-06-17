@@ -23,7 +23,7 @@ class Settings extends React.Component {
   render() {
     const { auth } = this.props;
     return (
-      <div className="container">
+      <div className="settings container">
         <h1>Settings</h1>
         <h3>Username</h3>
         <p>{auth.user.username}</p>{console.log(auth.user)}

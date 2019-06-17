@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 import { loginUser } from '../../store/actions/authActions';
 
-class Login extends React.Component {
+export class Login extends React.Component {
   constructor() {
     super();
 
@@ -57,7 +57,7 @@ class Login extends React.Component {
     const { username, password, errors } = this.state;
 
     return (
-      <div className="container">
+      <div className="login container">
         <h1>Login</h1>
         <p>
           Register

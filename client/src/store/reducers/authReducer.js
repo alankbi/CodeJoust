@@ -1,6 +1,6 @@
 import isEmpty from 'is-empty';
 
-import { SET_USER, USER_LOADING } from '../actions/types';
+import { SET_USER } from '../actions/types';
 
 const initialState = {
   isAuthenticated: false,
@@ -15,11 +15,6 @@ export default function (state = initialState, action) {
         ...state,
         isAuthenticated: !isEmpty(action.payload),
         user: action.payload,
-      };
-    case USER_LOADING:
-      return {
-        ...state,
-        loading: true,
       };
     default:
       return state;

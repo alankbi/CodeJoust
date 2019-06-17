@@ -66,7 +66,7 @@ class Register extends React.Component {
     } = this.state;
 
     return (
-      <div className="container">
+      <div className="register container">
         <h1>Register</h1>
         <p>
           Login

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 function NavBar({ auth }) {
   return (
-    <div className="navbar">
+    <div className="navbar container">
       <nav>
         <Link to="/">
           Home

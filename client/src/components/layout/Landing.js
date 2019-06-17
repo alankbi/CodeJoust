@@ -24,7 +24,7 @@ class Landing extends React.Component {
   render() {
     const { text } = this.state;
     return (
-      <div className="container">
+      <div className="landing container">
         <h1>CodeJoust</h1>
         <h4>This is the landing page for CodeJoust</h4>
 
