@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { logOut } from '../../store/actions/authActions';
 
-class Settings extends React.Component {
+export class Settings extends React.Component {
   constructor() {
     super();
     this.onLogoutClick = this.onLogoutClick.bind(this);
@@ -26,7 +26,7 @@ class Settings extends React.Component {
       <div className="settings container">
         <h1>Settings</h1>
         <h3>Username</h3>
-        <p>{auth.user.username}</p>{console.log(auth.user)}
+        <p>{auth.user.username}</p>
         <h3>Email</h3>
         <p>{auth.user.email}</p>
         <button type="submit" className="logout-button" onClick={this.onLogoutClick}>Logout</button>

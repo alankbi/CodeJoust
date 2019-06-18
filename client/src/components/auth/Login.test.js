@@ -1,14 +1,12 @@
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { configure, mount, shallow } from 'enzyme';
+import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-// import LocalStorageMock from '../../utils/LocalStorageMock';
 import { Login } from './Login';
 
 configure({ adapter: new Adapter() });
-// global.localStorage = new LocalStorageMock();
 
 let props = {};
 
@@ -19,9 +17,9 @@ describe('Login component', () => {
         isAuthenticated: false,
       },
       errors: {},
-      loginUser: sinon.fake(),
+      loginUser: sinon.spy(),
       history: {
-        push: sinon.fake(),
+        push: sinon.spy(),
       },
     };
   });
@@ -36,20 +34,34 @@ describe('Login component', () => {
     wrapper.setState({ username: 'test' });
     expect(wrapper.find('input').first().props().value).to.equal('test');
 
-    // Set password input value to password
-    wrapper.find('input').first().simulate('change', { target: { id: 'password', value: 'password' } });
+    // Set password input value to password, second argument is the 'e' parameter
+    wrapper.find('input').last().simulate('change', { target: { id: 'password', value: 'password' } });
     expect(wrapper.state('password')).to.equal('password');
   });
 
-  it('calls loginUser when submit is clicked', () => {
+  it('calls loginUser with the right user data when submit is clicked', () => {
     const wrapper = shallow(<Login {...props} />);
-    wrapper.find('.submit-button').simulate('click');
+    wrapper.setState({ username: 'test' });
+    const expected = { username: 'test', password: '' };
+
+    wrapper.find('form').simulate('submit', { preventDefault: () => {} });
     expect(props.loginUser.callCount).to.equal(1);
+    expect(props.loginUser.calledWith(expected, props.history)).to.be.true;
+  });
+
+  it('shows errors on the right input fields', () => {
+    const wrapper = shallow(<Login {...props} />);
+    props.errors = { username: 'username error', nothing: 'ignore this' };
+    wrapper.setProps({ errors: props.errors });
+
+    expect(wrapper.find('.error-text').first().text()).to.equal('username error');
+  });
+
+  it('redirects to the landing page when logged in', () => {
+    const wrapper = shallow(<Login {...props} />);
+    props.auth.isAuthenticated = true;
+    wrapper.setProps({ auth: props.auth });
+
+    expect(props.history.push.callCount).to.equal(1);
   });
 });
-
-/**
- tests:
- shows errors
- redirects to home if logged in? can you test this? maybe mock history push function
- */

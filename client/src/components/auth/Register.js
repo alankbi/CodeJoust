@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 import { registerUser } from '../../store/actions/authActions';
 
-class Register extends React.Component {
+export class Register extends React.Component {
   constructor() {
     super();
 

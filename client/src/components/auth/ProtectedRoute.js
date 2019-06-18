@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
 // Only accessible if logged in
-function ProtectedRoute({ component: Component, auth, ...args }) {
+export function ProtectedRoute({ component: Component, auth, ...args }) {
   if (auth.isAuthenticated) {
     return <Route {...args} component={Component} />;
   }

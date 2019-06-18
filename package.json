@@ -7,7 +7,7 @@
     "client": "npm start --prefix client",
     "server": "nodemon server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "mocha --recursive --timeout 10000",
+    "test": "mocha --recursive && cd client && npm test",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {

@@ -6,12 +6,10 @@ import { Route } from 'react-router-dom';
 
 import App from './App';
 import NavBar from './components/layout/NavBar';
-import LocalStorageMock from './utils/LocalStorageMock';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
 
 configure({ adapter: new Adapter() });
-global.localStorage = new LocalStorageMock();
 
 describe('App component', () => {
   it('contains a NavBar', () => {
