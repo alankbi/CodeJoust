@@ -34,10 +34,10 @@ export const loginUser = (userData, history) => (dispatch) => {
       localStorage.setItem('jwtToken', token);
       setAuthToken(token);
 
+      history.push('/');
+
       const decoded = jwtDecode(token);
       dispatch(setUser(decoded));
-
-      history.push('/');
     }).catch((err) => {
       dispatch({
         type: GET_ERRORS,

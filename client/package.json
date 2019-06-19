@@ -34,7 +34,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "mocha --require @babel/register ./src/utils/testSetup.js --recursive src/**/*.test.js",
+    "test": "mocha --require @babel/register ./src/utils/testSetup.js --recursive 'src/**/*.test.js'",
     "eject": "react-scripts eject"
   }
 }

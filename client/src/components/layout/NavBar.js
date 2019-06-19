@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-function NavBar({ auth }) {
+export function NavBar({ auth }) {
   return (
     <div className="navbar container">
       <nav>
