@@ -11,7 +11,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}-{{ checksum "client/package.json" }}
+            - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
 
       - run: yarn install
@@ -19,10 +19,9 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-            - client/node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}-{{ checksum "client/package.json" }}
+          key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: yarn test && cd client && yarn test
+      - run: yarn test
 
   deploy:
     docker:

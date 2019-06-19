@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import CodeEditor from '../code/CodeEditor';
+
 export class Landing extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = ({ text: '' });
   }
 
@@ -22,6 +23,7 @@ export class Landing extends React.Component {
           Register
         </Link>
         <p>{text}</p>
+        <CodeEditor />
       </div>
     );
   }
