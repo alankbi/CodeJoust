@@ -1,77 +1,48 @@
 import React from 'react';
-import CodeMirror from 'react-codemirror';
-import logo from './logo.svg';
-import './App.css';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/clike/clike';
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/ruby/ruby';
-import 'codemirror/mode/php/php';
-import 'codemirror/mode/swift/swift';
-import 'codemirror/mode/go/go';
-import 'codemirror/mode/rust/rust';
-import 'codemirror/theme/rubyblue.css';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import jwtDecode from 'jwt-decode';
 
-const defaults = {
-  'text/x-java': 'public enum Enum {\n\tVAL1, VAL2, VAL3\n}',
-  javascript: 'var component = {\n\tname: "react-codemirror",\n\tauthor: "Jed Watson",\n\trepo: "https://github.com/JedWatson/react-codemirror"\n};'
-};
+import store from './store';
+import { setUser, logOut } from './store/actions/authActions';
+import setAuthToken from './utils/setAuthToken';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+import NavBar from './components/layout/NavBar';
+import Landing from './components/layout/Landing';
+import Settings from './components/layout/Settings';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
-    this.state = ({
-      code: defaults['text/x-java'],
-      mode: 'text/x-java',
-    });
+function App() {
+  const token = localStorage.jwtToken;
+  if (token) {
+    setAuthToken(token);
 
-    this.changeMode = this.changeMode.bind(this);
+    const decoded = jwtDecode(token);
+    if (decoded.exp < Date.now() / 1000) { // Token expired
+      store.dispatch(logOut());
+      window.location.href = '/login';
+    } else {
+      store.dispatch(setUser(decoded));
+    }
   }
 
-  updateCode(code) {
-    this.setState({ code });
-  }
-
-  changeMode(e) {
-    const mode = e.target.value;
-    this.setState({
-      mode,
-      code: defaults[mode],
-    });
-  }
-
-
-  render() {
-    const { code, mode } = this.state;
-    const options = {
-      lineNumbers: true,
-      theme: 'default',
-      mode,
-      value: code,
-    };
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+  return (
+    <Provider store={store}>
+      <BrowserRouter>
+        <div className="app">
+          <NavBar />
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <ProtectedRoute exact path="/settings" component={Settings} />
+          </Switch>
         </div>
-        <p className="App-intro">
-          To get started, edit
-          {' '}
-          <code>src/App.js</code>
-          {' '}
-          and save to reload.
-        </p>
-        <CodeMirror value={code} onChange={this.updateCode} options={options} />
-        <select id="language" onChange={this.changeMode} value={mode}>
-          <option value="text/x-java">Java</option>
-          <option value="javascript">JavaScript</option>
-        </select>
-      </div>
-    );
-  }
+      </BrowserRouter>
+    </Provider>
+  );
 }
 
 export default App;
